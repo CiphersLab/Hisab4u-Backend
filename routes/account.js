@@ -50,12 +50,14 @@ exports.getUserAccounts = function(req, res){
     var userID =  req.body.userID
    var query = {userID:userID}
     findUserAccounts(query).then(function(data){
-        console.log(data)
-        return   getAccountsInfo(data)
-    }).then(function(data2){
+        res.send(data);
+        /*console.log(data)
+        return   getAccountsInfo(data)*/
+
+    })/*.then(function(data2){
             // console.log(data2)
             res.send(data2)
-        })
+        })*/
 }
 
 
@@ -68,7 +70,7 @@ exports.getAccountDetails = function(req, res){
 var findUserAccounts = function(query){
     var deferred = Q.defer();
     var result ;
-    Account.find(query,function(err,data){
+    Account.find(query.userID,function(err,data){
         if (err) {// ...
             console.log('An error has occurred');
 
