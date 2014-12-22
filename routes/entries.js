@@ -6,15 +6,16 @@ var Entries = mongoose.model('Entries');
 
 exports.createNewEntry = function(req, res){
     var entryData = req.body.entryData;
-    var entry_info = new Account({
+    var entry_info = new Entries({
         userID : entryData.userID,
         accountID:entryData.accountID,
-        purpose:entryData.purpose,
-        amount:entryData.amount,
-        entryDate:entryData.entryDate,
-        toFrom:entryData.toFrom,
+        purpose:entryData.newPurpose,
+        amount:entryData.newAmount,
+        entryDate:entryData.newDate,
+        toFrom:entryData.newTF,
         form:entryData.form
     });
+
 
     entry_info.save(function(err,data){
         if(err){
@@ -27,22 +28,22 @@ exports.createNewEntry = function(req, res){
 }
 
 exports.deleteEntry = function(req, res){
-    var id =  req.body.id
-    if (id.match(/^[0-9a-fA-F]{24}$/)) {
-        // Yes, it's a valid ObjectId, proceed with `findById` call.
+            var id =  req.body.id
+            if (id.match(/^[0-9a-fA-F]{24}$/)) {
+                // Yes, it's a valid ObjectId, proceed with `findById` call.
 
-        Entries.remove({_id:id},function(err, docs){
-            if(err) res.send(err);
-            else    res.send(docs);
-        });
-    }else{
-        console.log("err")
+                Entries.remove({_id:id},function(err, docs){
+                    if(err) res.send(err);
+                    else    res.send(docs);
+                });
+            }else{
+                console.log("err")
     }
 }
 
 exports.updateEntry = function(req, res){
     var entryData = req.body.entryData;
-    Entries.findOne({_id:entryData.id},function(err,data){
+    Entries.findOne({_id:entryData.entryID},function(err,data){
         if (err) {// ...
             console.log('An error has occurred');
 
@@ -56,7 +57,7 @@ exports.updateEntry = function(req, res){
                 res.send("error");
 
             }else{
-                var query={}
+                var query=entryData;
                 var result
                 Entries.update({_id:data.id},{$set:query},function(err2,data2){
                     if(data2 == 0){
