@@ -59,7 +59,7 @@ exports.login = function(req, res){
     var userData = req.body.userData;
     var presentQuery={email:userData.email,pass:userData.pass}
    // var presentQuery={email:req.body.email,pass: req.body.pass}; //userData.email,pass:userData.pass}//"muddassir_92@hotmail.com",pass:"a1234567"}//
-    User.findOne(presentQuery,function(err,data){
+    User.findOne(presentQuery,'_id email',function(err,data){
         if (err) {// ...
             console.log('An error has occurred');
             result = {status:0,msg:err}
