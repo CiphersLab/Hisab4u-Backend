@@ -18,7 +18,7 @@ var accountSchema = mongoose.Schema({
     userID : String,
     accountName: String,
     purpose: String,
-    createdDate:String
+    createdDate:Array
 
 });
 
