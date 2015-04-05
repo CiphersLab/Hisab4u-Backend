@@ -69,13 +69,13 @@ exports.login = function(req, res){
                 //alert('record not found');
                 result = {msg:'Email or Password have some error'};
                 console.log(result);
-                res.send(404, result);
+                res.send({status:404, data:result});
 
 
             }else{
                 result = {msg:'email found',data:{_id:data._id,email:data.email,userName:data.userName,pass:data.pass}};
                 console.log("Signed In as " + result);
-                res.send(200, result);
+                res.send({status:200, data:result});
 
             }//else  for data forward
 
