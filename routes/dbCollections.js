@@ -27,9 +27,10 @@ var entrySchema = mongoose.Schema({
     accountID: String,
     purpose: String,
     amount: String,
-    entryDate:String,
+    entryDate:Array,
     toFrom:String,
-    form:String
+    form:String,
+    updateDate:Array
 
 });
 

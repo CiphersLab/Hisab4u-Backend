@@ -5,15 +5,16 @@ var Account = mongoose.model('Account');
 var Entries = mongoose.model('Entries');
 
 exports.createNewEntry = function(req, res){
-    var entryData = req.body.entryData;
+    var entryData = req.body;
     var entry_info = new Entries({
         userID : entryData.userID,
         accountID:entryData.accountID,
-        purpose:entryData.newPurpose,
-        amount:entryData.newAmount,
-        entryDate:entryData.newDate,
-        toFrom:entryData.newTF,
-        form:entryData.form
+        purpose:entryData.purpose,
+        amount:entryData.amount,
+        entryDate:entryData.createdDate,
+        toFrom:entryData.toFrom,
+        form:entryData.form,
+        updateDate:entryData.createdDate
     });
 
 
