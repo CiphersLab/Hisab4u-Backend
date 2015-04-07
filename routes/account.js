@@ -2,7 +2,8 @@ var mongoose = require('mongoose');
 var Q = require('q');
 var User = mongoose.model('Users');
 var Account = mongoose.model('Account');
-
+var Entries = mongoose.model('Entries');
+var entriesFind = Q.nbind(Entries.find, Entries);
 /*
  * GET users listing.
  */
@@ -32,32 +33,33 @@ exports.createNewAccount = function(req, res){
 
 exports.deleteAccount = function(req, res){
 
-    var id =  req.body.id;
-    if (id.match(/^[0-9a-fA-F]{24}$/)) {
-        // Yes, it's a valid ObjectId, proceed with `findById` call.
+    var id =  req.body.accountID;
+    deleteUserAccount(id).then(function(){
+       return getAllEntriesOfAccount(id);
+    }).then(function(accountDet){
+        return deleteAllEntry(accountDet);
+        //console.log(accountDet)
+    }).then(function(result){
+        res.send(result)
+    })
 
-        Account.remove({_id:id},function(err, docs){
-            if(err) res.send(err);
-            else    res.send(docs);
-        });
-    }else{
-        console.log("err")
-    }
+
+
 }
 
 
 exports.getUserAccounts = function(req, res){
     var userID =  req.body.userID
-   var query = {userID:userID}
+    var query = {userID:userID}
     findUserAccounts(query).then(function(data){
         res.send(data);
         /*console.log(data)
-        return   getAccountsInfo(data)*/
+         return   getAccountsInfo(data)*/
 
     })/*.then(function(data2){
-            // console.log(data2)
-            res.send(data2)
-        })*/
+     // console.log(data2)
+     res.send(data2)
+     })*/
 }
 
 
@@ -91,5 +93,76 @@ var findUserAccounts = function(query){
         }//Main else
 
     })//FindOne funtionx
+    return deferred.promise;
+}
+
+
+var deleteUserAccount = function(accountId){
+    var deferred = Q.defer();
+    var result ;
+
+    if (accountId.match(/^[0-9a-fA-F]{24}$/)) {
+        // Yes, it's a valid ObjectId, proceed with `findById` call.
+
+        Account.remove({_id:accountId},function(err, docs){
+            if(err) {
+                res.send(err)
+            }else{
+                result =  deferred.resolve(docs);
+            };
+        });
+    }else{
+        console.log("err")
+    }
+    return deferred.promise;
+}
+
+var getAllEntriesOfAccount = function(accountId){
+
+    return entriesFind({accountID:accountId})
+        //   return   find()
+//  ^^^^^^ Rule 1
+
+        .then(function(account) {
+//  ^^^^^ Rule 3
+            if (!User){
+                account.entryInfo = 0;
+                //   console.log(User)
+            }else{
+                account.entryInfo = account;
+                //console.log(User)
+            }
+            return account;
+//      ^^^^^^ Rule 3b
+        });
+
+}
+
+var deleteAllEntry = function(accountDetail){
+    var result ;
+
+    var finalData = [];
+    if(accountDetail.length >0){
+
+        var promises = accountDetail.map(deleteEntry); // don't use forEach, we get something back
+        return Q.all(promises);
+
+    }else{
+        return {msg:"No Friends LIST"};
+    }
+}
+
+var  deleteEntry =function(entry){
+    var deferred = Q.defer();
+    var result ;
+
+    Entries.remove({_id:entry._id},function(err, docs){
+        if(err) {
+           result = deferred.resolve(err);
+        }
+        else{
+            result =deferred.resolve(docs)
+        }
+    });
     return deferred.promise;
 }

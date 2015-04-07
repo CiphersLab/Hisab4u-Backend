@@ -4,6 +4,7 @@ var User = mongoose.model('Users');
 var Account = mongoose.model('Account');
 var Entries = mongoose.model('Entries');
 
+
 exports.createNewEntry = function(req, res){
     var entryData = req.body;
     var entry_info = new Entries({
