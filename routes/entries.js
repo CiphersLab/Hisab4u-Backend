@@ -14,7 +14,8 @@ exports.createNewEntry = function(req, res){
         entryDate:entryData.entryDate,
         toFrom:entryData.toFrom,
         form:entryData.form,
-        updateDate:entryData.createdDate
+        updateDate:entryData.createdDate,
+        transactionType:entryData.transactionType
     });
 
 
@@ -29,7 +30,7 @@ exports.createNewEntry = function(req, res){
 }
 
 exports.deleteEntry = function(req, res){
-            var id =  req.body.id
+            var id =  req.body.entryID
             if (id.match(/^[0-9a-fA-F]{24}$/)) {
                 // Yes, it's a valid ObjectId, proceed with `findById` call.
 

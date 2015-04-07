@@ -30,7 +30,8 @@ var entrySchema = mongoose.Schema({
     entryDate:String,
     toFrom:String,
     form:String,
-    updateDate:Array
+    updateDate:Array,
+    transactionType:String
 
 });
 
