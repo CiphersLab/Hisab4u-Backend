@@ -11,7 +11,7 @@ exports.createNewEntry = function(req, res){
         accountID:entryData.accountID,
         purpose:entryData.purpose,
         amount:entryData.amount,
-        entryDate:entryData.createdDate,
+        entryDate:entryData.entryDate,
         toFrom:entryData.toFrom,
         form:entryData.form,
         updateDate:entryData.createdDate
@@ -43,8 +43,8 @@ exports.deleteEntry = function(req, res){
 }
 
 exports.updateEntry = function(req, res){
-    var entryData = req.body.entryData;
-    Entries.findOne({_id:entryData.entryID},function(err,data){
+    var entryData = req.body;
+    Entries.findOne({_id:entryData._id},function(err,data){
         if (err) {// ...
             console.log('An error has occurred');
 

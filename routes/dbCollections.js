@@ -27,7 +27,7 @@ var entrySchema = mongoose.Schema({
     accountID: String,
     purpose: String,
     amount: String,
-    entryDate:Array,
+    entryDate:String,
     toFrom:String,
     form:String,
     updateDate:Array
